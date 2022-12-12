@@ -40,22 +40,22 @@ class CartManager {
 
             const content = await fs.promises.readFile(this.path, 'utf-8');
 
-            if (!content) return {status: 400, message: 'No hay nada dentro del arhivo'}
+            if (!content) return { status: 400, message: 'No hay nada dentro del arhivo' }
 
             const carts = JSON.parse(content);
 
-            if (carts.length == 0) return {status: 400, message: 'No hay carritos disponibles'}
+            if (carts.length == 0) return { status: 400, message: 'No hay carritos disponibles' }
 
             const cart = carts.find(el => el.id == id);
 
-            if(cart){
+            if (cart) {
                 return cart["products"]
             } else {
-                return {status: 400, message: `El id: ${id} no existe`}
+                return { status: 400, message: `El id: ${id} no existe` }
             }
 
         } else {
-            return {status: 400, message: `El archivo no existe`}
+            return { status: 400, message: `El archivo no existe` }
         }
     }
 
@@ -63,11 +63,11 @@ class CartManager {
 
         const content = await fs.promises.readFile(this.path, 'utf-8');
 
-        if (!content) return {status: 400, message: 'No hay nada dentro del arhivo'}
+        if (!content) return { status: 400, message: 'No hay nada dentro del arhivo' }
 
         const carts = JSON.parse(content);
 
-        if (carts.length == 0) return {status: 400, message: 'No hay carritos disponibles'};
+        if (carts.length == 0) return { status: 400, message: 'No hay carritos disponibles' };
 
         const cart = carts.find(el => el.id == cid);
 
@@ -76,13 +76,17 @@ class CartManager {
             if (result.status == 400) {
                 return result;
             } else {
-                // const product = cart.products.find(el => el.id == pid)
-                cart.products.push({product: parseInt(pid), quantity: 1});
-                carts.splice(cid - 1, 1, cart);
+                const product = cart.products.find(el => el.product == pid)
+                if (product) {
+                    product.quantity++       
+                } else {
+                    cart.products.push({ product: parseInt(pid), quantity: 1 });
+                    carts.splice(cid - 1, 1, cart);
+                }
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
             }
         } else {
-            return {status: 400, message: 'El carrito con id: ' + cid + ' no existe'}
+            return { status: 400, message: 'El carrito con id: ' + cid + ' no existe' }
         }
     }
 }
