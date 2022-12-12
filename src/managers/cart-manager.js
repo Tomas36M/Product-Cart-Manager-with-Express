@@ -9,31 +9,27 @@ class CartManager {
         this.path = path
     }
 
-    writeFile = async (id) => {
-        const newCart = { id, products: [] }
+    writeFile = async () => {
+        const newCart = { id: 1, products: [] }
         await fs.promises.writeFile(this.path, JSON.stringify([newCart], null, 2))
     }
 
-    addCart = async (id) => {
+    addCart = async () => {
 
         if (fs.existsSync(this.path)) {
 
             const content = await fs.promises.readFile(this.path, 'utf-8');
 
-            if (!content) return this.writeFile(id);
+            if (!content) return this.writeFile();
 
             const carts = JSON.parse(content);
 
-            const idCheck = carts.find(el => el.id == id);
-
-            if (idCheck) return {status: 400, message: `El id: ${id} ya existe, cmabairlo por uno no existente`};
-
-            carts.push({ id, products: [] })
+            carts.push({ id: carts.length !== 0 ? carts[carts.length - 1].id + 1 : 1, products: [] })
 
             await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
 
         } else {
-            this.writeFile(id);
+            this.writeFile();
         }
 
     }
@@ -80,7 +76,8 @@ class CartManager {
             if (result.status == 400) {
                 return result;
             } else {
-                cart.products.push(pid);
+                // const product = cart.products.find(el => el.id == pid)
+                cart.products.push({product: parseInt(pid), quantity: 1});
                 carts.splice(cid - 1, 1, cart);
                 await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2));
             }

@@ -6,10 +6,8 @@ const manager = new CartManager('./src/data/carts.json')
 
 route.post('/', async (req, res) => {
     try {
-        const id = req.body.id
-        if (!id) return res.send({ status: 400, message: 'El id es obligatorio para la busqueda.' });
-        await manager.addCart(id)
-        res.send({ status: 200, message: 'Se ha agregado el carrito con id : ' + id })
+        await manager.addCart()
+        res.send({ status: 200, message: 'Se ha agregado el carrito' })
     } catch (err) {
         res.send({ status: 500, message: 'Hay un error en el servidor: ' + err });
     }
