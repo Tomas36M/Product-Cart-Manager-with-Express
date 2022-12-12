@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Gafas",
+    "description": "Unas gafas muy bonitas",
+    "price": 7777777,
+    "thumbnails": [
+      "img",
+      "img"
+    ],
+    "code": 9,
+    "status": true,
+    "category": 1
+  },
+  {
+    "id": 2,
+    "title": "Aguacate",
+    "description": "muy rico aguacate",
+    "price": 77,
+    "thumbnails": [
+      "img",
+      "img"
+    ],
+    "code": 3,
+    "status": true,
+    "category": "food",
+    "stock": 8
+  }
+]
