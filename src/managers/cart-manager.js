@@ -49,7 +49,7 @@ class CartManager {
             const cart = carts.find(el => el.id == id);
 
             if (cart) {
-                return cart["products"]
+                return cart
             } else {
                 return { status: 400, message: `El id: ${id} no existe` }
             }
