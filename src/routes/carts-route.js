@@ -31,7 +31,7 @@ route.post('/:cid/products/:pid', async (req, res) => {
         const cid = req.params.cid;
         const pid = req.params.pid;
         const result = await manager.addProductToCart(cid, pid);        
-        if(result.status == 400){
+        if(result && result.status == 400){
             return res.status(400).send({status: 400, message: result.message})
         }
         res.status(200).send({status: 'sucsess', message: 'El producto se ha agregado a la lista.'})
