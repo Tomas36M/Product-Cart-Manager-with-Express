@@ -78,7 +78,7 @@ class CartManager {
             } else {
                 const product = cart.products.find(el => el.product == pid)
                 if (product) {
-                    product.quantity++       
+                    product.quantity++
                 } else {
                     cart.products.push({ product: parseInt(pid), quantity: 1 });
                     carts.splice(cid - 1, 1, cart);
