@@ -80,7 +80,7 @@ class ProductManager {
 
             const codeCheck = products.find(el => el.code == code);
 
-            if (codeCheck) return console.log(`El codigo: ${code} con nombre ${title} ya existe, cmabairlo por uno no existente`);
+            if (codeCheck) return {status: 400, message: `El codigo: ${code} con nombre ${title} ya existe, cmabairlo por uno no existente`}
 
             products.push({
                 id: products.length !== 0 ? products[products.length - 1].id + 1 : 1,
@@ -107,11 +107,11 @@ class ProductManager {
 
             const content = await fs.promises.readFile(this.path, 'utf-8');
 
-            if (!content) return 'No hay nada dentro del archivo'
+            if (!content) return {status: 400, message: 'No hay nada en el archivo, agregar un producto nuevo.'};
 
             const products = JSON.parse(content);
 
-            if (products.length == 0) return 'no hay productos';
+            if (products.length == 0) return {status: 400, message: 'No hay productos en la lista, agregar un producto nuevo.'};
 
             const changingObj = products.find(el => el.id == id)
 
@@ -119,12 +119,12 @@ class ProductManager {
                 const updatedObj = { ...changingObj, ...updateValues }
                 products.splice(id - 1, 1, updatedObj);
             } else {
-                return `El id: ${id} no existe`
+                return {status: 400, message: 'El id no existe'}
             }
 
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2))
         } else {
-            return 'El archivo no existe'
+            return {status: 400, message: 'El archivo no existe'}
         }
     }
 
@@ -134,20 +134,24 @@ class ProductManager {
 
             const content = await fs.promises.readFile(this.path, 'utf-8');
 
-            if (!content) return 'No hay nada dentro del archivo'
+            if (!content) return {status: 400, message: 'No hay nada en el archivo, agregar un producto nuevo.'};
 
             const products = JSON.parse(content);
 
-            if (products.length == 0) return 'no hay productos';
+            if (products.length == 0) return {status: 400, message: 'No hay productos en la lista, agregar un producto nuevo.'};
 
             const deletedObj = products.find(el => el.id == id)
 
-            deletedObj ? products.splice(id - 1, 1) : `El id: ${id} no existe`
+            if(deletedObj){
+                products.splice(id - 1, 1)
+            } else {
+                return {status: 400, message: 'El id no existe'}
+            }
 
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2))
             
         } else {
-            return 'El archivo no existe'
+            return {status: 400, message: 'El archivo no existe'}
         }
     }
 }

@@ -39,7 +39,12 @@ route.post('/', async (req, res) => {
             return res.send({ status: 400, message: 'Todos los campos son obligatorios' });
         }
 
-        await manager.addProduct(title, description, price, thumbnails, code, category, stock);
+        const result = await manager.addProduct(title, description, price, thumbnails, code, category, stock);
+
+        if(result && result.status == 400){
+            return res.status(400).send({status: 400, message: result.message})
+        }
+
         res.send({ status: 200, message: 'Se ha agregado el producto: ' + title });
 
     } catch (err) {
@@ -52,7 +57,10 @@ route.put('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const obj = req.body;
-        await manager.updateProduct(id, obj);
+        const result =  await manager.updateProduct(id, obj);
+        if(result && result.status == 400){
+            return res.status(400).send({status: 400, message: result.message})
+        }
         res.send({ status: 200, message: 'Se ha actualizado el producto con id: ' + id });
     } catch (err) {
         res.send({ status: 500, message: 'Hay un error en el servidor: ' + err });
@@ -62,7 +70,10 @@ route.put('/:id', async (req, res) => {
 route.delete('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        await manager.deleteProduct(id);
+        const result =  await manager.deleteProduct(id);
+        if(result && result.status == 400){
+            return res.status(400).send({status: 400, message: result.message})
+        }
         res.send({ status: 200, message: 'Se ha eliminado el producto con id: ' + id });
     } catch (err) {
         res.send({ status: 500, message: 'Hay un error en el servidor: ' + err });
